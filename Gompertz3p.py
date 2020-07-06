@@ -6,6 +6,7 @@ Created on Fri Jul  3 09:51:39 2020
 @author: skyler
 """
 
+import math 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
@@ -47,14 +48,13 @@ def fopdt(y,t,x,alpha1, alpha2, beta1, gamma1):
     gamma1 = x[3]
     if t <= 4:
                 alpha1 = x[0]
-                dydt = (alpha1*y)*ln*(beta1/y + gamma1)
+                dydt = (alpha1*y)*math.log1p(beta1/y + gamma1)
     else:
                 alpha2 = x[1]
-                dydt = (alpha2*y)*ln*(beta1/y + gamma1)
+                dydt = (alpha2*y)*math.log1p(beta1/y + gamma1)
   #  except:
     #    print('Error with time extrapolation: ' + str(t))
     #    um = 0
-    # calculate derivative
     #    dydt = Km*y                # (-(y-yp0))*Km # + Km * (um-u0))/taum
     return dydt
 
@@ -63,7 +63,6 @@ def sim_model(x):
     # input arguments
     alpha1 = x[0]
     alpha2 = x[1]
-    # taum = x[1]
     beta1 = x[2]
     gamma1 = x[3]
     # storage for model values
@@ -90,11 +89,11 @@ def objective(x):
     return obj
 
 # initial guesses
-x0 = np.zeros(3)
-x0[0] = 10000 # aplpha1
-x0[1] = 10000 # alpha2
-x0[2] = 178045.79706504938 # beta
-x0[3]  = -1
+x0 = np.zeros(4)
+x0[0] = 5.9 # aplpha1
+x0[1] = 4 # alpha2
+x0[2] = 1# beta
+x0[3]  = .1
 
 # show initial objective
 print('Initial SSE Objective: ' + str(objective(x0)))
